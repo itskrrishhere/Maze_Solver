@@ -3,6 +3,7 @@ import numpy as np
 import heapq
 from PIL import Image
 
+
 # Load maze from an image file and convert to a binary numpy array.
 def load_maze(filename, maze_width, maze_height):
     img = Image.open(filename).convert('L')
@@ -11,15 +12,17 @@ def load_maze(filename, maze_width, maze_height):
     maze = np.where(maze < 128, 1, 0)  # 1 for walls, 0 for paths
     return maze
 
+
 # Return valid neighboring cells (not walls) for position (x, y).
 def get_neighbors(x, y, maze):
     neighbors = []
     directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
     for dx, dy in directions:
         nx, ny = x + dx, y + dy
-        if 0 <= nx < maze.shape[1] and 0 <= ny < maze.shape[0] and maze[nx, ny] == 0:
+        if 0 <= nx < maze.shape[0] and 0 <= ny < maze.shape[1] and maze[nx, ny] == 0:
             neighbors.append((nx, ny))
     return neighbors
+
 
 # Solve maze using Depth-First Search (DFS).
 def solve_dfs(maze, start, end):
@@ -40,6 +43,7 @@ def solve_dfs(maze, start, end):
                 parent_map[neighbor] = current
                 stack.append(neighbor)
     return None
+
 
 # Solve maze using Breadth-First Search (BFS).
 def solve_bfs(maze, start, end):
@@ -62,10 +66,12 @@ def solve_bfs(maze, start, end):
                 queue.append(neighbor)
     return None
 
+
 # Solve maze using A* search algorithm.
 def solve_astar(maze, start, end):
     def heuristic(a, b):
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
     open_list = []
     heapq.heappush(open_list, (heuristic(start, end), 0, start))
     g_costs = {start: 0}
@@ -88,6 +94,7 @@ def solve_astar(maze, start, end):
                 heapq.heappush(open_list, (f_cost, new_g, neighbor))
                 parent_map[neighbor] = current
     return None
+
 
 # Solve maze using MDP Value Iteration.
 def value_iteration(maze, start, end, gamma=0.99, theta=1e-4):
@@ -138,6 +145,7 @@ def value_iteration(maze, start, end, gamma=0.99, theta=1e-4):
             if delta < theta:
                 print(f"Value Iteration converged after {iteration} iterations.")
                 return iteration
+
     iters = run_value_iteration()
 
     def extract_policy():
@@ -173,6 +181,7 @@ def value_iteration(maze, start, end, gamma=0.99, theta=1e-4):
     extract_policy()
     path = get_optimal_path()
     return path, iters
+
 
 # Solve maze using MDP Policy Iteration.
 def policy_iteration(maze, start, end, gamma=0.99, theta=1e-4):
@@ -243,9 +252,11 @@ def policy_iteration(maze, start, end, gamma=0.99, theta=1e-4):
         steps += 1
     return path, policy_iter_count
 
+
 # Generate a maze filename based on dimensions.
 def get_maze_filename(width, height):
     return f"maze_{width}x{height}.png"
+
 
 # Draw the solution on the maze, save the image, and return solution length and filename.
 def draw_and_save_solution(maze, solution, output_filename, algo_time, width, height, iterations=None):
@@ -262,6 +273,7 @@ def draw_and_save_solution(maze, solution, output_filename, algo_time, width, he
     plt.close()
     print(f"Solution saved as {output_filename}")
     return len(solution), output_filename
+
 
 # Draw the solution on the maze and display it.
 def draw_and_show_solution(maze, solution, algo_time, width, height, iterations=None):

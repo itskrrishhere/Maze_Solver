@@ -87,7 +87,7 @@ class MazeApp(tk.Tk):
             }
             solve_algorithm = algorithms.get(algo_option)
             start = (1, 0)  # Entrance
-            end = (maze.shape[1] - 2, maze.shape[0] - 1)  # Exit
+            end = (maze.shape[0] - 2,maze.shape[1] - 1)  # Exit
 
             if solve_algorithm:
                 # Show a simple loading indicator
@@ -163,7 +163,7 @@ class MazeApp(tk.Tk):
             maze_width, maze_height = map(int, maze_size_str.split('x'))
             maze = load_maze(os.path.join(maze_folder, maze_filename), maze_width, maze_height)
             start = (1, 0)
-            end = (maze.shape[1] - 2, maze.shape[0] - 1)
+            end = (maze.shape[0] - 2,maze.shape[1] - 1)  # Exit
 
             # Solve with DFS
             tracemalloc.start()
